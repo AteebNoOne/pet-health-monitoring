@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "frontend",
+    "slug": "ai-pet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/profile1.jpg",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.zeeshanayub.aipet",
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      [
+        "react-native-ble-plx",
+        {
+          "isBackgroundEnabled": true,
+          "modes": [
+            "central",
+            "peripheral"
+          ],
+          "bluetoothAlwaysPermission": "Allow ${PRODUCT_NAME} to connect to bluetooth devices"
+        }
+      ]
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d5343212-106a-4edb-9bc0-e06baf9a50bb"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d5343212-106a-4edb-9bc0-e06baf9a50bb"
+    },
+    "owner": "zeeshanayub"
+  }
+}
