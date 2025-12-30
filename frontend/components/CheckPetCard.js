@@ -9,6 +9,11 @@ const CheckPetCard = ({ pet }) => {
   useEffect(() => {
   }, [pet]);
 
+  // Check if the pet is a cat
+  const isCat = pet?.pet_type?.toLowerCase() === 'cat';
+  // Check if the pet is a dog
+  const isDog = pet?.pet_type?.toLowerCase() === 'dog';
+
   return (
     <TouchableOpacity
       style={styles.card}
@@ -27,10 +32,43 @@ const CheckPetCard = ({ pet }) => {
         </View>
       </View>
 
-      <View style={styles.checkInButton}>
-        <MaterialCommunityIcons name="heart-pulse" size={20} color="#fff" />
+      {/* Buttons container - show emotion buttons for cats and dogs */}
+      <View style={styles.buttonsContainer}>
+        {isCat && (
+          <TouchableOpacity
+            style={styles.emotionButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              navigation.navigate('CatEmotionScreen', { pet });
+            }}
+          >
+            <MaterialCommunityIcons name="emoticon-happy-outline" size={20} color="#fff" />
+          </TouchableOpacity>
+        )}
+
+        {isDog && (
+          <TouchableOpacity
+            style={[styles.emotionButton, styles.dogEmotionButton]}
+            onPress={(e) => {
+              e.stopPropagation();
+              navigation.navigate('DogEmotionScreen', { pet });
+            }}
+          >
+            <MaterialCommunityIcons name="dog" size={20} color="#fff" />
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity
+          style={[styles.checkInButton, (isCat || isDog) && styles.checkInButtonWithMargin]}
+          onPress={(e) => {
+            e.stopPropagation();
+            navigation.navigate('PetCheckScreen', { pet });
+          }}
+        >
+          <MaterialCommunityIcons name="heart-pulse" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 };
 
@@ -78,6 +116,27 @@ const styles = StyleSheet.create({
     color: '#999',
     fontWeight: '500',
   },
+  buttonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  emotionButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#FF6F00',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#FF6F00',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  dogEmotionButton: {
+    backgroundColor: '#FF6F00', // Orange for dogs
+  },
   checkInButton: {
     width: 48,
     height: 48,
@@ -90,6 +149,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+  },
+  checkInButtonWithMargin: {
+    marginLeft: 0,
   },
 });
 

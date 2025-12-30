@@ -12,6 +12,10 @@ import EditVeteriScreen from '../screens/EditVeteriScreen';
 import AddVeterScreen from '../screens/AddVeterScreen';
 import InfoVeteriScreen from '../screens/InfoVeteriScreen';
 import PetActivitiesScreen from '../screens/PetActivitiesScreen';
+import CatEmotionScreen from '../screens/CatEmotionScreen';
+import CatEmotionHistoryScreen from '../screens/CatEmotionHistoryScreen';
+import DogEmotionScreen from '../screens/DogEmotionScreen';
+import DogEmotionHistoryScreen from '../screens/DogEmotionHistoryScreen';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
@@ -30,9 +34,10 @@ const HomeStack = () => {
       <Stack.Screen name="AddVeterScreen" component={AddVeterScreen} />
       <Stack.Screen name="InfoVeteriScreen" component={InfoVeteriScreen} />
       <Stack.Screen name="PetActivitiesScreen" component={PetActivitiesScreen} />
-
-
-
+      <Stack.Screen name="CatEmotionScreen" component={CatEmotionScreen} />
+      <Stack.Screen name="CatEmotionHistoryScreen" component={CatEmotionHistoryScreen} />
+      <Stack.Screen name="DogEmotionScreen" component={DogEmotionScreen} />
+      <Stack.Screen name="DogEmotionHistoryScreen" component={DogEmotionHistoryScreen} />
 
     </Stack.Navigator>
   );

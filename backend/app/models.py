@@ -83,3 +83,60 @@ class Veterinarian(db.Model):
             "gender": self.gender,
         }
 
+
+# Model for Cat Emotion Detection History
+class CatEmotionHistory(db.Model):
+    __tablename__ = "cat_emotion_history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), nullable=False)
+    emotion = db.Column(db.String(20), nullable=False)  # happy, sad, angry
+    confidence = db.Column(db.Float, nullable=False)  # 0.0 to 1.0
+    probabilities = db.Column(db.Text, nullable=False)  # JSON string with all probabilities
+    image_url = db.Column(db.String(255), nullable=True)  # Optional: saved image path
+    created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    
+    # Relationship to Pet
+    pet = db.relationship('Pet', backref='emotion_history')
+
+    def to_dict(self):
+        import json
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "pet_name": self.pet.pet_name if self.pet else None,
+            "emotion": self.emotion,
+            "confidence": self.confidence,
+            "probabilities": json.loads(self.probabilities) if self.probabilities else {},
+            "image_url": self.image_url,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+# Model for Dog Emotion Detection History
+class DogEmotionHistory(db.Model):
+    __tablename__ = "dog_emotion_history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey("pets.id"), nullable=False)
+    emotion = db.Column(db.String(20), nullable=False)  # angry, happy, relaxed, sad
+    confidence = db.Column(db.Float, nullable=False)  # 0.0 to 1.0
+    probabilities = db.Column(db.Text, nullable=False)  # JSON string with all probabilities
+    image_url = db.Column(db.String(255), nullable=True)  # Optional: saved image path
+    created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    
+    # Relationship to Pet
+    pet = db.relationship('Pet', backref='dog_emotion_history')
+
+    def to_dict(self):
+        import json
+        return {
+            "id": self.id,
+            "pet_id": self.pet_id,
+            "pet_name": self.pet.pet_name if self.pet else None,
+            "emotion": self.emotion,
+            "confidence": self.confidence,
+            "probabilities": json.loads(self.probabilities) if self.probabilities else {},
+            "image_url": self.image_url,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }

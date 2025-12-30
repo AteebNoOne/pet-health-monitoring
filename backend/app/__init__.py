@@ -92,4 +92,26 @@ def create_app():
     def uploaded_vet_file(filename):
         return send_from_directory(app.config["UPLOAD_FOLDER_VETS"], filename)
 
+    # ✅ Cat Emotion Detection
+    app.config["UPLOAD_FOLDER_CAT_EMOTIONS"] = os.path.join(app.root_path, "uploads/cat_emotions")
+    os.makedirs(app.config["UPLOAD_FOLDER_CAT_EMOTIONS"], exist_ok=True)
+
+    from app.routes.cat_emotion_routes import cat_emotion_bp
+    app.register_blueprint(cat_emotion_bp, url_prefix="/api/cat-emotion")
+
+    @app.route("/uploads/cat_emotions/<filename>")
+    def uploaded_cat_emotion_file(filename):
+        return send_from_directory(app.config["UPLOAD_FOLDER_CAT_EMOTIONS"], filename)
+
+    # ✅ Dog Emotion Detection
+    app.config["UPLOAD_FOLDER_DOG_EMOTIONS"] = os.path.join(app.root_path, "uploads/dog_emotions")
+    os.makedirs(app.config["UPLOAD_FOLDER_DOG_EMOTIONS"], exist_ok=True)
+
+    from app.routes.dog_emotion_routes import dog_emotion_bp
+    app.register_blueprint(dog_emotion_bp, url_prefix="/api/dog-emotion")
+
+    @app.route("/uploads/dog_emotions/<filename>")
+    def uploaded_dog_emotion_file(filename):
+        return send_from_directory(app.config["UPLOAD_FOLDER_DOG_EMOTIONS"], filename)
+
     return app

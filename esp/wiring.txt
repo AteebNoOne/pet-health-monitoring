@@ -1,0 +1,12 @@
+G15 -> Temp Yellow -> 4.7k ohm resistor -> V5
+GND -> Temp Black
+V5 -> Temp Red
+G21 -> MAX SDA (orange)
+G22 -> MAX SCL (Yellow)
+GND -> MAX GND
+V5 -> MAX VIN
+G27 -> 200 ohm resistor -> Yellow LED
+G26 -> 200 ohm resistor -> Red LED
+G25 -> 200 ohm resistor -> Green LED
+G33 -> Button +
+G34 -> 4.7k ohm resistor -> V5 -> 4.7k Resistor  -> GND
