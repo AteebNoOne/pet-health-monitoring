@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.100.2:8000';
+export const BASE_URL = 'http://192.168.100.152:8000';
 export async function fetchUsers() {
   try {
     const response = await fetch(`${BASE_URL}users`);

@@ -10,10 +10,11 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import profile1 from "../assets/profile1.jpg";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from "@react-native-picker/picker"; // 👈 for dropdown
 import { BASE_URL } from "../api/backend";
@@ -28,6 +29,7 @@ export default function AddVeteriScreen({ navigation }) {
   const [description, setDescription] = useState("");
   const [specialist, setSpecialist] = useState("");
   const [gender, setGender] = useState("");
+  const [genderModalVisible, setGenderModalVisible] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -99,12 +101,15 @@ const handleSave = async () => {
     >
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.headerRow}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("FindVenterScreen")}
-          >
-            <Ionicons name="arrow-back" size={24} color="black" />
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <MaterialCommunityIcons name="chevron-left" size={30} color="#fff" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Find Veterinarian</Text>
+
+          <Text style={styles.headerText}>Add Veterinarian</Text>
+
+          <View style={styles.headerIconCircle}>
+            <MaterialCommunityIcons name="stethoscope" size={28} color="#fff" />
+          </View>
         </View>
 
         <View style={styles.imageCenter}>
@@ -117,71 +122,104 @@ const handleSave = async () => {
           </TouchableOpacity>
         </View>
 
-        {/* Existing Inputs */}
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          value={name}
-          onChangeText={setName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          value={address}
-          onChangeText={setAddress}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Education Qualification"
-          value={education}
-          onChangeText={setEducation}
-        />
+        {/* Card with inputs */}
+        <View style={styles.cardContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#999"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Address"
+            value={address}
+            onChangeText={setAddress}
+            placeholderTextColor="#999"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            placeholderTextColor="#999"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Phone Number"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            placeholderTextColor="#999"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Education Qualification"
+            value={education}
+            onChangeText={setEducation}
+            placeholderTextColor="#999"
+          />
 
-        {/* 👇 New Specialist Input */}
-        <TextInput
-          style={styles.input}
-          placeholder="Specialist (e.g., Surgery, Dermatology)"
-          value={specialist}
-          onChangeText={setSpecialist}
-        />
+          {/* Specialist */}
+          <TextInput
+            style={styles.input}
+            placeholder="Specialist (e.g., Surgery, Dermatology)"
+            value={specialist}
+            onChangeText={setSpecialist}
+            placeholderTextColor="#999"
+          />
 
-        {/* 👇 New Gender Picker */}
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={gender}
-            onValueChange={(itemValue) => setGender(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select Gender" value="" />
-            <Picker.Item label="Male" value="Male" />
-            <Picker.Item label="Female" value="Female" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
+          {/* Gender Picker */}
+          <View style={styles.pickerContainer}>
+            {Platform.OS === 'android' ? (
+              <>
+                <TouchableOpacity style={styles.pickerTouchable} onPress={() => setGenderModalVisible(true)}>
+                  <Text style={[styles.pickerText, gender ? { color: '#333' } : { color: '#999' }]}>{gender || 'Select Gender'}</Text>
+                  <MaterialCommunityIcons name="chevron-down" size={20} color="#999" />
+                </TouchableOpacity>
+
+                <Modal visible={genderModalVisible} transparent animationType="fade" onRequestClose={() => setGenderModalVisible(false)}>
+                  <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setGenderModalVisible(false)}>
+                    <View style={styles.modalSheet}>
+                      {['Male', 'Female', 'Other'].map((g) => (
+                        <TouchableOpacity key={g} style={styles.modalItem} onPress={() => { setGender(g); setGenderModalVisible(false); }}>
+                          <Text style={styles.modalItemText}>{g}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </TouchableOpacity>
+                </Modal>
+              </>
+            ) : (
+              <Picker
+                selectedValue={gender}
+                onValueChange={(itemValue) => setGender(itemValue)}
+                style={[styles.picker, { color: '#333' }]}
+                dropdownIconColor="#999"
+                itemStyle={{ color: '#333' }}
+                mode="dropdown"
+              >
+                <Picker.Item label="Select Gender" value="" color="#999" />
+                <Picker.Item label="Male" value="Male" color="#333" />
+                <Picker.Item label="Female" value="Female" color="#333" />
+                <Picker.Item label="Other" value="Other" color="#333" />
+              </Picker>
+            )}
+          </View>
+
+          <TextInput
+            style={[styles.input, { height: 100, textAlignVertical: "top" }]}
+            placeholder="Description"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+            numberOfLines={4}
+            placeholderTextColor="#999"
+          />
         </View>
-
-        <TextInput
-          style={[styles.input, { height: 100, textAlignVertical: "top" }]}
-          placeholder="Description"
-          value={description}
-          onChangeText={setDescription}
-          multiline
-          numberOfLines={4}
-        />
 
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveButtonText}>Save</Text>
@@ -193,25 +231,46 @@ const handleSave = async () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 30,
-    paddingHorizontal: 2,
-    backgroundColor: "#fff",
+    paddingTop: 0,
+    paddingHorizontal: 0,
+    backgroundColor: "#f8f9fa",
     flexGrow: 1,
-    alignItems: "center",
+    alignItems: "stretch",
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "flex-start",
-    paddingHorizontal: 16,
-    paddingTop: 50,
-    marginBottom: 30,
-    backgroundColor: "#fff",
+    justifyContent: 'space-between',
+    alignSelf: "stretch",
+    paddingTop: 60,
+    paddingBottom: 30,
+    paddingHorizontal: 24,
+    marginBottom: 8,
+    backgroundColor: "#e91e63",
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    elevation: 5,
+    shadowColor: '#e91e63',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  backButton: {
+    padding: 6,
   },
   headerText: {
-    fontSize: 26,
-    fontWeight: "bold",
-    marginLeft: 10,
+    fontSize: 28,
+    fontWeight: "700",
+    marginLeft: 6,
+    color: '#fff'
+  },
+  headerIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   imageCenter: {
     alignItems: "center",
@@ -225,12 +284,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   changePhotoText: {
-    color: "#1e88e5",
+    color: "#e91e63",
     marginBottom: 20,
     textAlign: "center",
   },
+  cardContainer: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    marginBottom: 16,
+  },
   input: {
-    width: "90%",
+    width: "100%",
     height: 48,
     borderColor: "#ccc",
     borderWidth: 1,
@@ -241,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
   },
   pickerContainer: {
-    width: "90%",
+    width: "100%",
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
@@ -253,17 +324,55 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   saveButton: {
-    backgroundColor: "#1e88e5",
+    backgroundColor: "#e91e63",
     paddingVertical: 14,
-    borderRadius: 8,
-    width: "90%",
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    width: "95%",
+    alignSelf: 'center',
     alignItems: "center",
     marginTop: 10,
     marginBottom: 30,
+    elevation: 3,
+    shadowColor: '#e91e63',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   saveButtonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "700",
+  },
+  pickerTouchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+  },
+  pickerText: {
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'flex-end',
+  },
+  modalSheet: {
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  modalItem: {
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: '#333',
   },
 });

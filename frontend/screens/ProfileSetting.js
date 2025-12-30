@@ -86,6 +86,10 @@ export default function SettingsScreen({ navigation }) {
               {userType === "pet_owner" ? "Pet Owner" : "Veterinarian"}
             </Text>
           </View>
+
+          <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate('EditProfileScreen')}>
+            <MaterialCommunityIcons name="square-edit-outline" size={30} color="#e91e63" />
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -210,6 +214,17 @@ const styles = StyleSheet.create({
   },
   accountInfo: {
     flex: 1,
+  },
+  editProfileButton: {
+    position: 'absolute',
+    right: 14,
+    top: 18,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff'
   },
   accountName: {
     fontSize: 20,

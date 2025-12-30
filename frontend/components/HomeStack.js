@@ -16,12 +16,14 @@ import CatEmotionScreen from '../screens/CatEmotionScreen';
 import CatEmotionHistoryScreen from '../screens/CatEmotionHistoryScreen';
 import DogEmotionScreen from '../screens/DogEmotionScreen';
 import DogEmotionHistoryScreen from '../screens/DogEmotionHistoryScreen';
+import AddPetScreen from '../screens/AddPetScreen';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeMain" component={HomeScreen} />
+      <Stack.Screen name="AddPetScreen" component={AddPetScreen} />
       <Stack.Screen name="TemperatureScreen" component={TemperatureScreen} />
       <Stack.Screen name="HeartBeatScreen" component={HeartBeatScreen} />
       <Stack.Screen name="BehaviourScreen" component={BehaviourScreen} />

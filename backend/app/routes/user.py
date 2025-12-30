@@ -74,3 +74,42 @@ def login():
         "user_type": user.user_type,
         "token": token
     }), 200
+
+
+# ✅ Update user profile
+@user_bp.route("/<int:user_id>", methods=["PUT"])
+def update_user(user_id):
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No input provided"}), 400
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    username = data.get("username")
+    email = data.get("useremail")
+    password = data.get("userpassword")
+    gender = data.get("gender")
+
+    # If changing email, ensure uniqueness
+    if email and email != user.useremail:
+        if User.query.filter_by(useremail=email).first():
+            return jsonify({"error": "Email already exists"}), 400
+        user.useremail = email
+
+    if username:
+        user.username = username
+    if gender is not None:
+        user.gender = gender
+    if password:
+        user.set_password(password)
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "User updated successfully",
+        "username": user.username,
+        "useremail": user.useremail,
+        "gender": user.gender
+    }), 200

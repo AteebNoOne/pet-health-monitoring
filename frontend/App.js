@@ -7,6 +7,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomMenu from "./components/BottomMenu";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import DogEmotionScreen from "./screens/DogEmotionScreen";
+import CatEmotionScreen from "./screens/CatEmotionScreen";
+import CatEmotionHistoryScreen from "./screens/CatEmotionHistoryScreen";
+import DogEmotionHistoryScreen from "./screens/DogEmotionHistoryScreen";
+import EditProfileScreen from "./screens/EditProfileScreen";
 import { AuthContext } from "./AuthContext";
 import { PetsProvider } from "./components/PetsContext";   // ✅ Wrap app in PetsProvider
 
@@ -42,7 +47,14 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {isLoggedIn ? (
-              <Stack.Screen name="MainApp" component={BottomMenu} />
+              <>
+                <Stack.Screen name="MainApp" component={BottomMenu} />
+                <Stack.Screen name="DogEmotionScreen" component={DogEmotionScreen} />
+                <Stack.Screen name="CatEmotionScreen" component={CatEmotionScreen} />
+                <Stack.Screen name="DogEmotionHistoryScreen" component={DogEmotionHistoryScreen} />
+                <Stack.Screen name="CatEmotionHistoryScreen" component={CatEmotionHistoryScreen} />
+                <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+              </>
             ) : (
               <>
                 <Stack.Screen name="Login" component={LoginScreen} />
